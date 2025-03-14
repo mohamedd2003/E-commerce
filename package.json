@@ -1,0 +1,26 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "E-commerce Apis contain Auth,payment,categories ",
+  "main": "index.js",
+  "type":"module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "e-commerce",
+    "apis",
+    "restful-api",
+    "endpoints",
+    "express.js",
+    "node.js",
+    "mongo",
+    "mongoose"
+  ],
+  "author": "mohamed-hossam",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.12.1"
+  }
+}
