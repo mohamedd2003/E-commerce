@@ -11,7 +11,6 @@ const schema = new Schema(
     },
     slug: {
       type: String,
-      required: [true, "Slug Is Required"],
       minLenght: [3, "Min Letters are 3"],
       maxLength: [200, "Max letters are 200"],
       unique: true,
@@ -24,6 +23,14 @@ maxLength: [500, "Max letters are 500"],
 required:[true,'Description is required'],
 
   },
+  sold:{
+type:Number,
+required:[true,"Sold Items is required"]
+  },
+  stock:{
+    type:Number,
+    required:[true,"Stock Items is required"]
+      },
   imageCover:{
     type:String,
     required:[true,"Image Cover is Required"]
@@ -36,6 +43,10 @@ required:[true,'Description is required'],
   category:{
     type:Types.ObjectId,
     ref:"Category"
+  },
+  subCategory:{
+    type:Types.ObjectId,
+    ref:"SubCategory"
   },
   brand:{
     type:Types.ObjectId,

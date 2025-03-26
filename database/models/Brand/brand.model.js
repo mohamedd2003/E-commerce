@@ -18,8 +18,8 @@ const schema=new Schema({
         index:true
     },
     logo:{
-        type:String,
-        required:[true,"Image Is Required"],
+        url:String,
+        public_id:String,
     },
     createdBy:{
         type:Types.ObjectId,

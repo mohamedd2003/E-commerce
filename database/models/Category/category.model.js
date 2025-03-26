@@ -18,8 +18,9 @@ const schema=new Schema({
         index:true
     },
     image:{
-        type:String,
-        required:[true,"Image Is Required"],
+        url:String,
+        public_id:String
+
     },
     createdBy:{
         type:Types.ObjectId,
