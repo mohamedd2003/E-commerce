@@ -8,6 +8,7 @@ const schema = new Schema(
       minLenght: [3, "Min Letters are 3"],
       maxLength: [50, "Max letters are 50"],
       unique: true,
+      trim:true
     },
     slug: {
       type: String,
@@ -15,6 +16,8 @@ const schema = new Schema(
       maxLength: [200, "Max letters are 200"],
       unique: true,
       index: true,
+      trim:true
+
     },
   description:{
 type:String,
@@ -32,14 +35,24 @@ required:[true,"Sold Items is required"]
     required:[true,"Stock Items is required"]
       },
   imageCover:{
-    type:String,
-    required:[true,"Image Cover is Required"]
+    url:String,
+    public_id:String,
+  
   },
-  images:{
-    type:[String],
-    required:[true,"Images are Required"]
-
+  price:{
+    type:Number,
+    required:[true,"Price is Required"]
   },
+  images: [{
+    url: {
+      type: String,
+      required: true,
+    },
+    public_id: {
+      type: String,
+      required: true
+    }
+  }],
   category:{
     type:Types.ObjectId,
     ref:"Category"

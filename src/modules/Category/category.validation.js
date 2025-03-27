@@ -10,7 +10,5 @@ export const addCategorySchema=Yup.object({
         const category = await Category.findOne({ name: value });
         return !category; // Return true if the username is unique
     }),
-    image:Yup.object({
-        url:Yup.string(),public_id:Yup.string()
-    }).required()
+    image:Yup.object({url:Yup.string(),public_id:Yup.string() }).required()
 })

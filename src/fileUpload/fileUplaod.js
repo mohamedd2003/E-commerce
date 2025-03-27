@@ -70,6 +70,8 @@ export const replaceCloudinaryImage = async (newFilePath, publicId) => {
  
 };
 export const deleteCloudinaryImage = async (publicId) => {
-  await cloudinary.v2.api.delete_resources([publicId]);
+
+
+  await cloudinary.v2.api.delete_resources(publicId);
  
 };
