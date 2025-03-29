@@ -19,7 +19,7 @@ fields.forEach((field)=>delete filterObj[field])
         mongooseQuery=mongooseQuery.sort(sortedObj)
         
     }
-    if(req.query.fields){
+    if(req.query.field){
         let selectedFields=req.query.fields.split(',').join(' ')
         mongooseQuery=mongooseQuery.select(selectedFields)
         
