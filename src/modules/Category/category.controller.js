@@ -4,6 +4,7 @@ import { catchError } from "../../middlewares/Error/catchError.js";
 import AppError from "../../utils/appError.js";
 import mongoose from "mongoose";
 import {  deleteCloudinaryImage, replaceCloudinaryImage, uploadToCloudinary } from "../../fileUpload/fileUplaod.js";
+import { ApiFeaturs } from "../../utils/apiFeaturs.js";
 
 export const addCategory=catchError(async(req,res,next)=>{
   
@@ -64,8 +65,10 @@ let{id}=req.params
 })
 
 export const getAllCategories=catchError(async(req,res,next)=>{
- let categories= await Category.find()
 
- if(categories.length===0)return next(new AppError("There are not Categories in DataBase",404))
-  res.json({message:'success',categories})
+  let apiFeaturs=new ApiFeaturs(Category.find(),req.query).pagination().filter().sort().search().fields()
+      let categories=await apiFeaturs.mongooseQuery
+let categoryCount=categories.length
+ if(categoryCount===0)return next(new AppError("There are not Categories in DataBase",404))
+  res.json({message:'success',page:apiFeaturs.pageNumber,count:categoryCount,categories})
 })

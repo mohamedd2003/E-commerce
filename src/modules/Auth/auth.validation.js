@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { User } from '../../../database/models/User/User.model.js';
 
 // Regular expression for validating email format
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -14,7 +15,12 @@ export const registerSchema = Yup.object({
 
   email: Yup.string()
     .required('Email is required')
-    .matches(emailRegex, 'Please enter a valid email address'),
+    .matches(emailRegex, 'Please enter a valid email address')
+     .test("unique-name", "Email already exists", async (value) => {
+            // Check if the username exists in the database
+            const user = await User.findOne({ email: value });
+            return !user; // Return true if the username is unique
+        }),
 
   password: Yup.string()
     .required('Password is required')

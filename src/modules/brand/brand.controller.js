@@ -3,6 +3,7 @@ import { catchError } from "../../middlewares/Error/catchError.js";
 import AppError from "../../utils/appError.js";
 import { deleteCloudinaryImage, replaceCloudinaryImage, uploadToCloudinary } from "../../fileUpload/fileUplaod.js";
 import { Brand } from "../../../database/models/Brand/brand.model.js";
+import { ApiFeaturs } from "../../utils/apiFeaturs.js";
 
 export const addBrand=catchError(async(req,res,next)=>
 {
@@ -45,10 +46,12 @@ res.json({message:'Succcess',brand})
 
 
 export const getAllBrands=catchError(async(req,res,next)=>{
-    let brands=await Brand.find()
-    if(!brands) return next(new AppError("There are no brands exist",404))
-    let brandsCount=await Brand.countDocuments()
-    res.json({message:'Success',brandsCount,brands})
+
+let apiFeaturs=new ApiFeaturs(Brand.find(),req.query).pagination().filter().sort().search().fields()
+    let brands=await apiFeaturs.mongooseQuery
+    let brandsCount=brands.length
+if(brandsCount===0) return next(new AppError("There are no brands exist",404))
+    res.json({message:'Success',page:apiFeaturs.pageNumber,brandsCount,brands})
 })
 
 

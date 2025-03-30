@@ -2,42 +2,17 @@ import slugify from "slugify";
 import { Product } from "../../../database/models/Product/Product.model.js";
 import { deleteCloudinaryImage, replaceCloudinaryImage, uploadToCloudinary } from "../../fileUpload/fileUplaod.js";
 import { catchError } from "../../middlewares/Error/catchError.js";
+import { ApiFeaturs } from "../../utils/apiFeaturs.js";
 
 export const getAllProducts=catchError(async(req,res,next)=>{
     //====> Filter
-    let filterObj=structuredClone(req.query)
-    filterObj=JSON.stringify(filterObj)
-   filterObj= filterObj.replace(/(gt|gte|lt|lte)/g,(value)=>`$${value}`)
-    filterObj=JSON.parse(filterObj)
-let fields=["search","fields","page","sort"]
-fields.forEach((field)=>delete filterObj[field])
+  
 
-
-    let mongooseQuery=  Product.find(filterObj)
-    if(req.query.sort){
-        let sortedObj=req.query.sort.split(',').join(' ')
-        mongooseQuery=mongooseQuery.sort(sortedObj)
-        
-    }
-    if(req.query.fields){
-        let selectedFields=req.query.fields.split(',').join(' ')
-        mongooseQuery=mongooseQuery.select(selectedFields)
-        
-    }
-    if(req.query.search){
-        
-        mongooseQuery=mongooseQuery.find({
-            $or:[
-                {title:{$regex:req.query.search,$options:"i"}},
-                {description:{$regex:req.query.search,$options:"i"}}
-            ]
-        })
-        
-    }
-    let products=await mongooseQuery
+ let apiFeature=new ApiFeaturs(Product.find(),req.query).pagination().filter().sort().search().fields()
+    let products=await apiFeature.mongooseQuery
     let productsCount= products.length
     if(productsCount===0) return res.status(404).json({message:"There are no products Exist"})
-    res.json({message:"Success",productsNumber:productsCount,products})
+    res.json({message:"Success",page:apiFeature.pageNumber, productsNumber:productsCount,products})
 })
 
 export const getProduct=catchError(async(req,res,next)=>{
