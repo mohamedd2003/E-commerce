@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import bcrypt from "bcryptjs";
+import { Types } from "mongoose";
 
 const schema = new Schema(
   {
@@ -52,7 +53,11 @@ const schema = new Schema(
       url:String,
       public_id:String,
       
-    }
+    },
+    wishlist:[{
+      type:Types.ObjectId,
+      ref:"Product"
+    }]
   
    
   },
