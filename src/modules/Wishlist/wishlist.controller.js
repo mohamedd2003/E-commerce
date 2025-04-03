@@ -23,3 +23,10 @@ export const deleteProductFromWishlist=catchError(async(req,res,next)=>{
     if(!wishlist)return next(new AppError("NO ",404))
         res.json({message:"success",wishlist})
 })
+export const getUserWishlist=catchError(async(req,res,next)=>{
+
+
+    let {wishlist}=await User.findById(req.user._id).populate('wishlist')
+    if(!wishlist)return next(new AppError("NO ",404))
+        res.json({message:"success",wishlist})
+})
