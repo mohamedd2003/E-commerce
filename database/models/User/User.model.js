@@ -57,7 +57,12 @@ const schema = new Schema(
     wishlist:[{
       type:Types.ObjectId,
       ref:"Product"
-    }]
+    }],
+    addresses:[{
+      phone:String,
+      city:String,
+      street:String
+    }]//will Make _id because it's Obj
   
    
   },

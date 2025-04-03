@@ -15,6 +15,7 @@ const schema = new Schema(
       type: Types.ObjectId,
       ref: "User",
     },
+    discount:Number
   },
   {
     versionKey: false,
