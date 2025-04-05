@@ -1,6 +1,7 @@
 import addressRouter from "./Address/address.routes.js"
 import authRouter from "./Auth/auth.routes.js"
 import brandRouter from "./brand/brand.routes.js"
+import cartRouter from "./Cart/cart.routes.js"
 import categoryRouter from "./Category/category.routes.js"
 import productRouter from "./product/product.routes.js"
 import reviewRouter from "./review/review.routes.js"
@@ -17,4 +18,5 @@ export const bootstrap=(app)=>{
     app.use('/api/review',reviewRouter)
     app.use('/api/wishlist',wishlistRouter)
     app.use('/api/address',addressRouter)
+    app.use('/api/cart',cartRouter)
 }
