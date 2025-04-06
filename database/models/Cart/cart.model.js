@@ -5,7 +5,8 @@ const schema=new Schema({
     cartItems:[
   {  product:{type:Types.ObjectId,ref:"Product"},
     quantity:{type:Number,default:1},
-    price:{type:Number}
+    price:{type:Number},
+    productName:String
 }
 ],
 totalCartPrice:Number,

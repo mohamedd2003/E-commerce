@@ -14,7 +14,7 @@ export const removeAdrress=catchError(async(req,res,next)=>
         let{id}=req.params
 let{addresses}=await User.findByIdAndUpdate(req.user._id,{$pull:{addresses:{_id:req.params.id}}},{new:true})
 let count=addresses.length
-res.json({message:"success"})
+res.json({message:"success",NumberOfAddresses:count})
     })
 
     export const getAllUserAddresses=catchError(async(req,res,next)=>{
