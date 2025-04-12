@@ -1,4 +1,5 @@
 import { Cart } from "../../../database/models/Cart/cart.model.js"
+import { Coupon } from "../../../database/models/coupon/coupon.model.js"
 import { Product } from "../../../database/models/Product/Product.model.js"
 import { catchError } from "../../middlewares/Error/catchError.js"
 import AppError from "../../utils/appError.js"
@@ -86,4 +87,13 @@ export const getUserLoggedCart=catchError(async(req,res,next)=>{
     if(!cart) return next(new AppError("Cart Not Found",404))
     res.json({message:"success",cart})
 
+})
+export const applyCoupon=catchError(async(req,res,next)=>{
+    let coupon=await Coupon.findOne({code:req.body.code,expire_Date:{$gtl:Date.now()}})
+    if(!coupon) return next(new AppError("Oops Invalid Coupon"))
+        let cart=await Cart.findOne({user:req.user._id})
+    cart.totalCartPriceAfterDiscount=cart.totalCartPrice-(cart.totalCartPrice*coupon.discount)/100
+    cart.discount=coupon.discount
+    await cart.save()
+    res.json({message:'success',cart})
 })
