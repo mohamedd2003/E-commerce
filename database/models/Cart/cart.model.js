@@ -10,8 +10,8 @@ const schema=new Schema({
 }
 ],
 totalCartPrice:Number,
-totalCartPriceAfterDiscount:Number,
-discount:Number
+discount:Number,
+totalCartPriceAfterDiscount:Number
 },{timestamps:true,versionKey:false})
 
 export const Cart=model("Cart",schema)

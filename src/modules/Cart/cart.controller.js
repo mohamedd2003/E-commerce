@@ -82,7 +82,7 @@ export const clearCart=catchError(async(req,res,next)=>{
 })
 
 export const getUserLoggedCart=catchError(async(req,res,next)=>{
-    let cart=await Cart.findOne({user:req.user._id})
+    let cart=await Cart.findOne({user:req.user._id}).populate(["cartItems.product" ,"user"])
     if(!cart) return next(new AppError("Cart Not Found",404))
     res.json({message:"success",cart})
 

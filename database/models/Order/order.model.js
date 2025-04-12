@@ -1,8 +1,8 @@
-import { date } from "joi";
 import { model, Schema, Types } from "mongoose";
 
 
 const schema= new Schema({
+    user:{type:Types.ObjectId,ref:'User'},
 shippingAddress:{
     city:String,
     street:String,
@@ -10,7 +10,7 @@ shippingAddress:{
 },
 orderItems:[
     {
-        Product:{type:Types.ObjectId,ref:'Product'},
+        product:{type:Types.ObjectId,ref:'Product'},
         quantity:Number,
         price:Number
     }
@@ -35,5 +35,5 @@ isDelivered:{
 
 })
 
-const Order=model("Order",schema)
+export const Order=model("Order",schema)
 
