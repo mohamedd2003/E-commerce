@@ -23,4 +23,4 @@ const schema = new Schema(
   }
 );
 
-export const Coupoun = model("Coupoun", schema);
+export const Coupon = model("Coupon", schema);
