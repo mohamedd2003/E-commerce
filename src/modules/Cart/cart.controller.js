@@ -5,7 +5,11 @@ import { catchError } from "../../middlewares/Error/catchError.js"
 import AppError from "../../utils/appError.js"
 let calcTotalPrice=(isExist)=>{
     isExist.totalCartPrice= isExist.cartItems.reduce((prev,item)=>prev+=item.quantity*item.price,0)
-
+    if(isExist.discount){
+        isExist.totalCartPriceAfterDiscount=isExist.totalCartPrice-(isExist.totalCartPrice*isExist.discount)/100
+    }
+    
+    
 }
 
 export const addToCart=catchError(async(req,res,next)=>{
@@ -78,7 +82,7 @@ export const removeProductFromCart=catchError(async(req,res,next)=>{
    res.json({message:"success",cart:existCart})
 })
 export const clearCart=catchError(async(req,res,next)=>{
-    let existCart=await Cart.findOneAndDelete({user:req.user._id})
+  await Cart.findOneAndDelete({user:req.user._id})
    res.json({message:"success"})
 })
 
@@ -89,11 +93,11 @@ export const getUserLoggedCart=catchError(async(req,res,next)=>{
 
 })
 export const applyCoupon=catchError(async(req,res,next)=>{
-    let coupon=await Coupon.findOne({code:req.body.code,expire_Date:{$gtl:Date.now()}})
-    if(!coupon) return next(new AppError("Oops Invalid Coupon"))
+    let coupon=await Coupon.findOne({code:req.body.code,expire_Date:{$gt:Date.now()}})
+    if(!coupon) return next(new AppError("Oops Invalid Coupon",404))
         let cart=await Cart.findOne({user:req.user._id})
-    cart.totalCartPriceAfterDiscount=cart.totalCartPrice-(cart.totalCartPrice*coupon.discount)/100
-    cart.discount=coupon.discount
+ 
+  cart.discount=coupon.discount
     await cart.save()
     res.json({message:'success',cart})
 })

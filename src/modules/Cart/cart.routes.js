@@ -3,7 +3,7 @@ import { auth } from "../../middlewares/Auth/auth.js";
 import { allowedTo } from "../../middlewares/Auth/allowedTo.js";
 import { addToCart, applyCoupon, clearCart,  getUserLoggedCart,  removeProductFromCart, updateCartQuantity } from "./cart.controller.js";
 import { validationSchema } from "../../middlewares/validation/validationSchema.js";
-import { addCartSchema, UpdateCartQuantitySchema } from "./cart.validation.js";
+import { addCartSchema, applyCouponSchema, UpdateCartQuantitySchema } from "./cart.validation.js";
 
 const cartRouter=Router()
 
@@ -15,6 +15,6 @@ cartRouter.route("/:id")
 .patch(auth,allowedTo("user"),validationSchema(UpdateCartQuantitySchema),updateCartQuantity)
 .delete(auth,allowedTo("user"),removeProductFromCart)
 
-cartRouter.post('/appy-coupon',auth,allowedTo("user"),applyCoupon)
+cartRouter.post('/applyCoupon',auth,allowedTo("user"),validationSchema(applyCouponSchema),applyCoupon)
 
 export default cartRouter

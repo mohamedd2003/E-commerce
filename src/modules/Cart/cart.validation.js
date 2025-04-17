@@ -15,3 +15,11 @@ export const UpdateCartQuantitySchema=yup.object({
     
 
 })
+export const applyCouponSchema=yup.object({
+   
+   code:yup.string().required("Coupon Code is Required").min(5,"Coupon Must be at least 5 Characters")
+   .max(30,"Coupon Code can't exceed 30 Character"),
+   
+    
+
+})

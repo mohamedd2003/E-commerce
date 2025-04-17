@@ -44,8 +44,6 @@ export const getAllOrders=catchError(async(req,res,next)=>{
 export const getLoggedUserOrders=catchError(async(req,res,next)=>{
 
     let order=await Order.find({user:req.params.id}).populate('orderItems.product')
-  console.log(req.params);
-  console.log(req.user._id);
   
     res.json({message:'success',order})
 })
