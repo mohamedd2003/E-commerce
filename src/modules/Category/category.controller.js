@@ -72,3 +72,9 @@ let categoryCount=categories.length
  if(categoryCount===0)return next(new AppError("There are not Categories in DataBase",404))
   res.json({message:'success',page:apiFeaturs.pageNumber,count:categoryCount,categories})
 })
+export const getcategory=catchError(async(req,res,next)=>{
+
+let{id}=req.params
+let category= await Category.findById(id)
+  res.json({message:'success',category})
+})

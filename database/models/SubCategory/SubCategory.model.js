@@ -12,8 +12,6 @@ const schema = new Schema(
     slug: {
       type: String,
       required: [true, "Slug Is Required"],
-      minLenght: [3, "Min Letters are 3"],
-      maxLength: [200, "Max letters are 200"],
       unique: true,
       index: true,
     },
