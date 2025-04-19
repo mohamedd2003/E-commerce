@@ -5,6 +5,7 @@ import { catchError } from "../../middlewares/Error/catchError.js";
 import AppError from "../../utils/appError.js";
 import axios from "axios"
 import 'dotenv/config'
+import { pay } from "../../utils/checkout.js";
 
 const PAYMOB_API_KEY = process.env.PAYMOB_API_KEY;
 const INTEGRATION_ID = process.env.PAYMOB_INTEGRATION_ID;
@@ -59,59 +60,32 @@ export const getLoggedUserOrders=catchError(async(req,res,next)=>{
 
 
 
+export const createCheckOutSession = catchError(async (req, res, next) => {
 
-
-  export const createCheckOutSession=catchError(async(req,res,next)=>{
-    
-   
-    // 1. Check if user has a cart
-    const cart = await Cart.findOne({ user:req.user._id });
-    if (!cart)return next(new AppError("NO Cart Exist",404))
-
-    let totalCartPrice=cart.totalCartPriceAfterDiscount|| cart.totalCartPrice
+  const cart = await Cart.findOne({ user: req.user._id });
+       if (!cart)  return next(new AppError("No cart exists", 404))
+         let totalCartPrice = cart.totalCartPriceAfterDiscount || cart.totalCartPrice;
+  const amountCents = totalCartPrice * 100;
+ let billing_data={
+             first_name: req.body.first_name,
+             last_name: req.body.last_name,
+             email: req.user.email,
+             phone_number: req.body.phoneNumber,
+             country: "EG",
+             city: req.body.city,
+             street: req.body.street,
+             building: req.body.building,
+             floor: req.body.floor,
+             apartment: req.body.apartment,
+             state: req.body.state,
+           }
+    // get the payment token for this order
+    const token = await pay(billing_data, amountCents);
   
-    const amountCents = totalCartPrice * 100;
-    try {
-      // 2. Authenticate with Paymob
-      const authResponse = await axios.post("https://accept.paymob.com/api/auth/tokens", {
-        api_key: PAYMOB_API_KEY,
-      });
-      const authToken = authResponse.data.token;
+    // create the payment link
+    const link = `https://accept.paymob.com/api/acceptance/iframes/${process.env.IFRAME_ID}?payment_token=${token}`;
   
-      // 3. Generate Payment Key
-      const paymentKeyResponse = await axios.post(
-        "https://accept.paymob.com/api/acceptance/payment_keys",
-        {
-          auth_token: authToken,
-          amount_cents: amountCents,
-          currency: "EGP",
-          billing_data: { // ✅ REQUIRED
-            first_name: req.body.first_name,
-            last_name:req.body.last_name,
-            email:req.user.email,
-            phone_number:req.body.phoneNumber,
-            country: "EG", // 2-letter country code
-            city: req.body.city,
-            street: req.body.street,
-            building: req.body.building,
-            floor: req.body.floor,
-            apartment: req.body.apartment,
-            state:req.body.state
-          },
- 
-          integration_id: INTEGRATION_ID,
-        }
-      );
-  
-      const paymentToken = paymentKeyResponse.data.token;
-  
-      // 4. Create hosted payment URL
-      const paymentURL = `https://accept.paymob.com/api/acceptance/iframes/${IFRAME_ID}?payment_token=${paymentToken}`;
-  
-      res.status(200).json({ url: paymentURL });
-    } catch (err) {
-      console.error("Paymob Error:", err.response?.data || err.message);
-      res.status(500).json({ error: "Payment initialization failed." });
-    }
-  })
-
+    // respond with the payment link
+   res.json({message:'success',Payment_Link:link});
+  if(err) return next(new AppError(err,400))
+})
