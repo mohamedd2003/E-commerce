@@ -5,6 +5,7 @@ import cartRouter from "./Cart/cart.routes.js"
 import categoryRouter from "./Category/category.routes.js"
 import couponRouter from "./Coupon/coupon.routes.js"
 import orderRouter from "./Order/order.routes.js"
+import paymentRouter from "./Payment/payment.routes.js"
 import productRouter from "./product/product.routes.js"
 import reviewRouter from "./review/review.routes.js"
 import subCategoryRouter from "./SubCatergory/subCategory.routes.js"
@@ -25,4 +26,5 @@ export const bootstrap=(app)=>{
     app.use('/api/order',orderRouter)
     app.use('/api/coupon',couponRouter)
     app.use('/api/subcategory',subCategoryRouter)
+    app.use('/api/',paymentRouter)
 }

@@ -31,6 +31,9 @@ isDelivered:{
     type:Boolean,
     default:false
 },
+Paymob_OrderId:{
+    type:Number
+}
 
 
 })
