@@ -1,7 +1,10 @@
 import { Cart } from "../../../database/models/Cart/cart.model.js";
 import dotenv from "dotenv"
-import { pay } from "../../utils/checkout.js";
+import { pay } from "../../utils/payment/checkout.js";
 import { catchError } from "../../middlewares/Error/catchError.js";
+import AppError from "../../utils/appError.js";
+import { getTransactionById } from "../../utils/payment/getTrx.js";
+import { refundTransaction } from "../../utils/payment/refundTrx.js";
 dotenv.config();
 
 export const createCheckOutSession = catchError(async (req, res, next) => {
@@ -23,14 +26,38 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
                apartment: req.body.apartment,
                state: req.body.state,
              }
+             
       // get the payment token for this order
-      const token = await pay(billing_data, amountCents);
+      const token = await pay(billing_data, amountCents,req.user._id);
     
       // create the payment link
       const link = `https://accept.paymob.com/api/acceptance/iframes/${process.env.IFRAME_ID}?payment_token=${token}`;
     
       // respond with the payment link
+      await Cart.findByIdAndDelete(cart._id)
      res.json({message:'success',Payment_Link:link});
     if(err) return next(new AppError(err,400))
+  })
+
+
+  export const refund=catchError(async (req, res, next) => {
+    try {
+      // Get the transaction id from the request body
+      const { transactionId } = req.body;
+  
+      // Get the transaction details from paymob
+      const transaction = await getTransactionById(transactionId);
+  
+      // Refund the transaction
+      const refunded = await refundTransaction(
+        transactionId,
+        transaction.amount_cents
+      );
+  
+      // respond with the refunded transaction details
+      return res.status(200).send(refunded);
+    } catch (error) {
+      return res.status(400).json(error);
+    }
   })
   

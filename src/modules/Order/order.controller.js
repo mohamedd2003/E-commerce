@@ -1,5 +1,6 @@
 import { Cart } from "../../../database/models/Cart/cart.model.js";
 import { Order } from "../../../database/models/Order/order.model.js";
+import Payment from "../../../database/models/payment/payment.model.js";
 import { Product } from "../../../database/models/Product/Product.model.js";
 import { catchError } from "../../middlewares/Error/catchError.js";
 import AppError from "../../utils/appError.js";
@@ -12,11 +13,19 @@ export const createCashOrder=catchError(async(req,res,next)=>{
     let totalOrderPrice=cart.totalCartPrice||cart.totalCartPriceAfterDiscount
 
 
+if(req.body.paymentType=="visa"){
+    await Payment.insertOne({user:req.user._id,amount:totalOrderPrice})
+}
     let order= new Order({
         user:req.user._id,
         orderItems:cart.cartItems,
         totalOrderPrice,
-        shippingAddress:req.body,
+        shippingAddress:{
+            city:req.body.city,
+            street:req.body.street,
+            phone:req.body.phone
+        },
+        paymentType:req.body.paymentType
 
     })
     await order.save()
@@ -34,6 +43,43 @@ export const createCashOrder=catchError(async(req,res,next)=>{
 
     await Product.bulkWrite(options)
     await Cart.findByIdAndDelete(cart._id)
+    res.json({message:"success",order})
+})
+
+export const createVisaOrder=catchError(async(req,res,next)=>{
+    let cart= await Cart.findById(req.params.id)
+    if(!cart) return next(new AppError("Cart Not Found",404))
+    let totalOrderPrice=cart.totalCartPrice||cart.totalCartPriceAfterDiscount
+await Payment.insertOne({user:req.user._id,amount:totalOrderPrice})
+
+
+    let order= new Order({
+        user:req.user._id,
+        orderItems:cart.cartItems,
+        totalOrderPrice,
+        shippingAddress:{
+            city:req.body.city,
+            street:req.body.street,
+            phone:req.body.phone
+        },
+        paymentType:"visa"
+
+    })
+    await order.save()
+
+    let options=cart.cartItems.map((prod)=>{
+        return(
+            {
+                updateOne:{
+                    "filter":{_id:prod.product},
+                    "update":{$inc:{sold:prod.quantity,stock:-prod.quantity}}
+                }
+            }
+        )
+    })
+
+    await Product.bulkWrite(options)
+   
     res.json({message:"success",order})
 })
 

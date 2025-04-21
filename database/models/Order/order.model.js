@@ -18,7 +18,7 @@ orderItems:[
 totalOrderPrice:Number,
 paymentType:{
     type:String,
-    enum:['cash','card'],
+    enum:['cash','visa'],
     default:'cash'
 },
 paidAt:Date,
