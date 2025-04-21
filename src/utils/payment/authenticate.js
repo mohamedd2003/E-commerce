@@ -21,6 +21,8 @@ export async function authenticate() {
     };
     const response = await axios.post(url, data, { headers });
     const accessToken = response.data.token;
+
+    
     return accessToken;
   } catch (error) {
     console.error("Error authenticating:", error.response.data);

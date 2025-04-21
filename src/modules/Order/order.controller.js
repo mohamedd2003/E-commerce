@@ -13,9 +13,7 @@ export const createCashOrder=catchError(async(req,res,next)=>{
     let totalOrderPrice=cart.totalCartPrice||cart.totalCartPriceAfterDiscount
 
 
-if(req.body.paymentType=="visa"){
-    await Payment.insertOne({user:req.user._id,amount:totalOrderPrice})
-}
+
     let order= new Order({
         user:req.user._id,
         orderItems:cart.cartItems,
@@ -25,7 +23,7 @@ if(req.body.paymentType=="visa"){
             street:req.body.street,
             phone:req.body.phone
         },
-        paymentType:req.body.paymentType
+        paymentType:req.body.paymentType,
 
     })
     await order.save()
@@ -62,7 +60,9 @@ await Payment.insertOne({user:req.user._id,amount:totalOrderPrice})
             street:req.body.street,
             phone:req.body.phone
         },
-        paymentType:"visa"
+        paymentType:"visa",
+        isPaid:true
+
 
     })
     await order.save()

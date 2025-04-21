@@ -8,7 +8,8 @@ export const createOrderSchema=Yup.object({
     street:Yup.string().required("street Name is Required")
     .min(3,"street Name Must be at least 3 Characters")
     .max(80,"street name shouldn't exceed 80 Character"),
-    Phone:Yup.string().required("phone Number is Required")
+
+    phone:Yup.string().required("phone Number is Required")
     .min(11,"phone Number Must be 11 Digit")
     .max(11,"phone number Must be 11 Digit")
 })
