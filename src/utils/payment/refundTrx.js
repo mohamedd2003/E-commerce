@@ -1,6 +1,7 @@
 import axios from "axios";
 import { authenticate } from "./authenticate.js";
 import dotenv from "dotenv";
+import AppError from "../appError.js";
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ const PAYMOB_URL =process.env.PAYMOB_URL;
 
 // Function to refund a transaction
 export async function refundTransaction(transactionId, refundAmount) {
-  try {
+
     // Authentication Request -- step 1 in the docs
     const accessToken = await authenticate();
     const url = `${PAYMOB_URL}/acceptance/void_refund/refund`;
@@ -26,10 +27,10 @@ export async function refundTransaction(transactionId, refundAmount) {
 
     const response = await axios.post(url, data, { headers });
 
-    console.log('Refund transaction successful.');
-    console.log('Response:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error refunding transaction:", error.response.data);
+    if(err)return next(new AppError(error.response.data)) 
+  else{
+return response.data;
+
   }
+  
 }
