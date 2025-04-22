@@ -41,7 +41,6 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
 
 
   export const refund=catchError(async (req, res, next) => {
-    try {
       // Get the transaction id from the request body
       const { transactionId } = req.body;
   
@@ -55,9 +54,8 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
       );
   
       // respond with the refunded transaction details
-      return res.status(200).send(refunded);
-    } catch (error) {
-      return res.status(400).json(error);
-    }
+       res.json({message:"success",refunded});
+  
+    if(err) return next(new AppError(err))
   })
   
