@@ -47,7 +47,7 @@ export const createCashOrder=catchError(async(req,res,next)=>{
 export const createVisaOrder=catchError(async(req,res,next)=>{
     let cart= await Cart.findById(req.params.id)
     if(!cart) return next(new AppError("Cart Not Found",404))
-    let totalOrderPrice=cart.totalCartPrice||cart.totalCartPriceAfterDiscount
+    let totalOrderPrice=cart.totalCartPriceAfterDiscount||cart.totalCartPriceS
 await Payment.insertOne({user:req.user._id,amount:totalOrderPrice})
 
 

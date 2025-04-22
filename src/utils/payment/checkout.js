@@ -39,12 +39,6 @@
 
     })
 
-
-
-
-
-  
-
     // Payment Key Request  -- step 3 in the docs
     const paymentKeyUrl = `${PAYMOB_URL}/acceptance/payment_keys`;
 
