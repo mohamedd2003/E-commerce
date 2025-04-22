@@ -17,7 +17,7 @@ newUser.password=undefined
 
 export const getAlluser=catchError(async(req,res,next)=>{
     
-    let allUsers=await User.find({role:"user"}).select("-password")
+    let allUsers=await User.find().select("-password")
     let userCount=await User.countDocuments()
     res.json({message:'success',NumberOfsers:userCount,allUsers})
 })
