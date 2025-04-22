@@ -1,5 +1,8 @@
-const userRouter = Router();
+import { Router } from "express";
+import orderRouter from "../Order/order.routes";
 
+const userRouter = Router();
+export default userRouter
 // Sub-router for orders
 userRouter.use('/:id/orders', orderRouter);
 
