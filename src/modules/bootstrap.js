@@ -26,5 +26,5 @@ export const bootstrap=(app)=>{
     app.use('/api/order',orderRouter)
     app.use('/api/coupon',couponRouter)
     app.use('/api/subcategory',subCategoryRouter)
-    app.use('/api/',paymentRouter)
+    app.use('/api',paymentRouter)
 }
