@@ -76,5 +76,6 @@ export const getcategory=catchError(async(req,res,next)=>{
 
 let{id}=req.params
 let category= await Category.findById(id)
+if(!category) return next(new AppError("category Not Found",404))
   res.json({message:'success',category})
 })
