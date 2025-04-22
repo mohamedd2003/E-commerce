@@ -1,5 +1,5 @@
 import { Router } from "express";
-import orderRouter from "../Order/order.routes";
+import orderRouter from "../Order/order.routes.js";
 
 const userRouter = Router();
 export default userRouter
