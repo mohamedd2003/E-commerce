@@ -55,13 +55,13 @@ let{id}=req.params
     return next(new AppError(`Invalid Category ID: ${id}`, 400));
   }
   let category= await Category.findByIdAndDelete(id)
+  if(!category)return next(new AppError(`Category With id:(${id})Not Found`,404))
   await deleteCloudinaryImage(category.image.public_id)
  
   
-  if(!category)return next(new AppError(`Category With id:(${id})Not Found`,404))
-    else{
+   
       res.json({message:'Success'})
-    }
+    
 })
 
 export const getAllCategories=catchError(async(req,res,next)=>{
