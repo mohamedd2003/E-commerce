@@ -79,7 +79,7 @@ res.json({message:"Success",newProd})
 export const deleteProuct=catchError(async(req,res,next)=>{
     let {id}=req.params
     let product=await Product.findByIdAndDelete(id)
+    if(!product) return res.status(404).json({message:"Product not found"})
    await deleteCloudinaryImage([product.imageCover.public_id,...product.images.map(image=>image.public_id)])
-if(!product) return res.status(404).json({message:"Product not found"})
     res.json({message:'success'})
 })
