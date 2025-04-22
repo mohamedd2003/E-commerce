@@ -9,9 +9,9 @@ import orderRouter from "../Order/order.routes.js";
 import { checkEmailExist } from "../../middlewares/Email/checkEmailExist.js";
 const userRouter=Router()
 userRouter.use('/:id/orders',orderRouter)
-userRouter.post('/add',auth,allowedTo('admin'),checkEmailExist,uploadSingleFile("image"),validationSchema(addUserSchema),addUser)//Add
 userRouter.get('/allUsers',auth,allowedTo('admin'),getAlluser)
-userRouter.get('/:id',auth,allowedTo('admin'),getUserById)
+userRouter.post('/add',auth,allowedTo('admin'),checkEmailExist,uploadSingleFile("image"),validationSchema(addUserSchema),addUser)//Add
 userRouter.delete('/:id',auth,allowedTo('admin'),validationSchema(deleteUserSchema),deleteUser)
 userRouter.put('/:id',auth,allowedTo('admin'),validationSchema(updateUserSchema),updateUser)
+userRouter.get('/:id',auth,allowedTo('admin'),getUserById)
 export default userRouter
