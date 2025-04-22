@@ -14,6 +14,9 @@ app.use(express.json())
 bootstrap(app)
 
 app.use(globalError)
+app.get("/", (req, res) => {
+    res.status(200).json({ message: "Welcome to the API!" });
+  });
 app.use("*",(req,res,next)=>{
     next(new AppError(`path ${req.originalUrl} Not Found`,404))
 })
