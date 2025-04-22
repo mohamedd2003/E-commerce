@@ -27,10 +27,8 @@ export async function refundTransaction(transactionId, refundAmount) {
 
     const response = await axios.post(url, data, { headers });
 
-    if(err)return next(new AppError(error.response.data)) 
-  else{
-return response.data;
+    if(error)return next(new AppError(error.response.data)) 
+      return response.data;
 
-  }
   
 }

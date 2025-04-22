@@ -41,6 +41,7 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
 
 
   export const refund=catchError(async (req, res, next) => {
+    try {
       // Get the transaction id from the request body
       const { transactionId } = req.body;
   
@@ -54,8 +55,36 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
       );
   
       // respond with the refunded transaction details
-       res.json({message:"success",refunded});
-  
-    if(err) return next(new AppError(err))
+      return res.status(200).send(refunded);
+    } catch (error) {
+  console.log(error)
+
+      return res.status(400).json(error);
+    }
+
   })
+
+
+
+
+  export const postPayCallback = catchError(async (req, res, next) => {
+    const data = req.body;
+  
+    console.log("📦 Received Paymob callback:", data);
+  
+    // مثال: لو عايز تتأكد أن العملية ناجحة وتعمل update في الداتا بيز
+    if (data.success === true && data.obj?.order?.merchant_order_id) {
+      const merchantOrderId = data.obj.order.merchant_order_id;
+  
+      // هنا تقدر تبحث عن الأوردر وتحدث حالته مثلاً:
+      // await Order.findOneAndUpdate({ merchantOrderId }, { status: "paid" });
+  
+      console.log(`✅ Order ${merchantOrderId} paid successfully`);
+    } else {
+      console.log("❌ Transaction failed or still pending");
+    }
+  
+    return res.status(200).send("Received"); // لازم ترجع 200 علشان Paymob ماتعيدش الإرسال
+  });
+  
   

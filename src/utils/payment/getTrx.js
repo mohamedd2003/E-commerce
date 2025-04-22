@@ -6,6 +6,8 @@ const PAYMOB_URL = process.env.PAYMOB_URL;
 
 // Function to fetch transaction details by ID from Paymob servers
 export async function getTransactionById(transactionId) {
+
+  try{
     // Authentication Request -- step 1 in the docs
     const accessToken = await authenticate();
     const url = `${PAYMOB_URL}/acceptance/transactions/${transactionId}`;
@@ -19,10 +21,9 @@ export async function getTransactionById(transactionId) {
 
 
 
-
-      if(err)return next(new AppError(error.response.data)) 
-    else{
-  return response.data;
-  
-    }
+return response.data;
+} catch (error) {
+  console.log(error)
+  return res.status(400).json(error);
+}
 }
