@@ -98,6 +98,8 @@ export const applyCoupon=catchError(async(req,res,next)=>{
         let cart=await Cart.findOne({user:req.user._id})
  
   cart.discount=coupon.discount
+
+  calcTotalPrice(cart)
     await cart.save()
     res.json({message:'success',cart})
 })
