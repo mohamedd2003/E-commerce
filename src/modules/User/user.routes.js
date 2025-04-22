@@ -8,7 +8,7 @@ import { addUserSchema, deleteUserSchema, updateUserSchema } from "./user.valida
 import orderRouter from "../Order/order.routes.js";
 const userRouter=Router()
 userRouter.use('/:id/orders',orderRouter)
-userRouter.post('/add',auth,allowedTo('admin'),validationSchema(addUserSchema),uploadSingleFile("image"),addUser)//Add
+userRouter.post('/add',auth,allowedTo('admin'),uploadSingleFile("image"),validationSchema(addUserSchema),addUser)//Add
 userRouter.get('/all',auth,allowedTo('admin'),getAlluser)
 userRouter.get('/:id',auth,allowedTo('admin'),getUserById)
 userRouter.delete('/:id',auth,allowedTo('admin'),validationSchema(deleteUserSchema),deleteUser)
