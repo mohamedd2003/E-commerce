@@ -17,5 +17,5 @@ userRouter.post('/add', auth, allowedTo('admin'), checkEmailExist, uploadSingleF
 // 🟡 Then dynamic routes
 userRouter.delete('/:id', auth, allowedTo('admin'), validationSchema(deleteUserSchema), deleteUser);
 userRouter.put('/:id', auth, allowedTo('admin'), validationSchema(updateUserSchema), updateUser);
-userRouter.get('/:id', auth, allowedTo('admin'), getUserById);
+userRouter.get('/specificUser/:id', auth, allowedTo('admin'), getUserById);
 export default userRouter
