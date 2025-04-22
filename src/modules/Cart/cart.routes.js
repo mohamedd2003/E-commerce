@@ -11,6 +11,8 @@ cartRouter.route("/")
 .post(auth,allowedTo("user"),validationSchema(addCartSchema),addToCart)
 .delete(auth,allowedTo("user"),clearCart)
 .get(auth,allowedTo("user",'admin'),getUserLoggedCart)
+
+
 cartRouter.route("/:id")
 .patch(auth,allowedTo("user"),validationSchema(UpdateCartQuantitySchema),updateCartQuantity)
 .delete(auth,allowedTo("user"),removeProductFromCart)
