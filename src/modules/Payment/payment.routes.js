@@ -6,5 +6,5 @@ const paymentRouter=Router()
 
 paymentRouter.post("/checkOut",auth,createCheckOutSession)
 paymentRouter.post("/refund",auth,refund)
-paymentRouter.post("/post_pay", postPayCallback);
+paymentRouter.post("/webhook", postPayCallback);
 export default paymentRouter

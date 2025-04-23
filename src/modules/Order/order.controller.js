@@ -44,44 +44,7 @@ export const createCashOrder=catchError(async(req,res,next)=>{
     res.json({message:"success",order})
 })
 
-export const createVisaOrder=catchError(async(req,res,next)=>{
-    let cart= await Cart.findById(req.params.id)
-    if(!cart) return next(new AppError("Cart Not Found",404))
-    let totalOrderPrice=cart.totalCartPriceAfterDiscount||cart.totalCartPriceS
-await Payment.insertOne({user:req.user._id,amount:totalOrderPrice})
 
-
-    let order= new Order({
-        user:req.user._id,
-        orderItems:cart.cartItems,
-        totalOrderPrice,
-        shippingAddress:{
-            city:req.body.city,
-            street:req.body.street,
-            phone:req.body.phone
-        },
-        paymentType:"visa",
-        isPaid:true
-
-
-    })
-    await order.save()
-
-    let options=cart.cartItems.map((prod)=>{
-        return(
-            {
-                updateOne:{
-                    "filter":{_id:prod.product},
-                    "update":{$inc:{sold:prod.quantity,stock:-prod.quantity}}
-                }
-            }
-        )
-    })
-
-    await Product.bulkWrite(options)
-   
-    res.json({message:"success",order})
-})
 
 
 export const getAllOrders=catchError(async(req,res,next)=>{
