@@ -9,7 +9,7 @@
   // the docs for this API are here: https://docs.paymob.com/docs/accept-standard-redirect
   export async function pay(billing_data, amount_cents,userId) {
   
-
+    const merchantOrderId = `${userId}-${cart._id}`;
     
     // Authentication Request -- step 1 in the docs
     const accessToken = await authenticate();

@@ -110,7 +110,7 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
 // res.json({message:"success",order})
     const data = req.body;
   
-    console.log("📦 Received Paymob callback:", data.order);
+    console.log("📦 Received Paymob callback:", data.obj.order);
   
   //   // مثال: لو عايز تتأكد أن العملية ناجحة وتعمل update في الداتا بيز
   //   if (data.success === true && data.obj?.order?.merchant_order_id) {
