@@ -80,7 +80,7 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
   const email=data.obj.order.shipping_data.email
   const user= await User.findOne({email})
 
-    let cart= await Cart.findById({user:user._id})
+    let cart= await Cart.findOne({user:user._id})
     if(!cart) return next(new AppError("Cart Not Found",404))
     // let totalOrderPrice=cart.totalCartPriceAfterDiscount||cart.totalCartPrice
 await Payment.insertOne({
