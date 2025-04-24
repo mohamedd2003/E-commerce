@@ -75,7 +75,8 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
   
 
   export const webhook=catchError(async(req,res,next)=>{
-    const data = req.body;
+   try{
+     const data = req.body;
   const email=data.obj.order.shipping_data.email
   const user= await User.findOne({email})
 
@@ -120,6 +121,10 @@ currency:data.obj.order.currency
     await Product.bulkWrite(options)
     await Cart.findByIdAndDelete(cart._id)
 res.json({message:"success",order})
+   }
+   catch(err){
+    console.log(err)
+   }
   //   // مثال: لو عايز تتأكد أن العملية ناجحة وتعمل update في الداتا بيز
   //   if (data.success === true && data.obj?.order?.merchant_order_id) {
   //     const merchantOrderId = data.obj.order.merchant_order_id;
