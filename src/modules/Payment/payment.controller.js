@@ -90,7 +90,8 @@ userName:user.name,
   amount:data.obj.amount_cents/100,
 Transaction_id:data.obj.id,
 currency:data.obj.order.currency,
-created_at:data.obj.order.created_at
+created_at:data.obj.order.created_at,
+userEmail:email
 })
 
 

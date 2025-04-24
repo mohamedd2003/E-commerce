@@ -13,6 +13,9 @@ const schema = new mongoose.Schema({
     },userName:{
         type:String
     },
+    userEmail:{
+        type:String
+    },
     created_at:{
         type:String
     },
