@@ -5,7 +5,7 @@ import { catchError } from "../../middlewares/Error/catchError.js";
 import AppError from "../../utils/appError.js";
 import { getTransactionById } from "../../utils/payment/getTrx.js";
 import { refundTransaction } from "../../utils/payment/refundTrx.js";
-import { Order } from "../../../database/models/Order/order.model.js";
+// import { Order } from "../../../database/models/Order/order.model.js";
 dotenv.config();
 
 export const createCheckOutSession = catchError(async (req, res, next) => {
@@ -13,7 +13,8 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
     const cart = await Cart.findOne({ user: req.user._id });
          if (!cart)  return next(new AppError("No cart exists", 404))
            let totalCartPrice = cart.totalCartPriceAfterDiscount || cart.totalCartPrice;
-    const amountCents = totalCartPrice * 100;
+    
+         const amountCents = totalCartPrice * 100;
    let billing_data={
                first_name: req.body.first_name,
                last_name: req.body.last_name,
