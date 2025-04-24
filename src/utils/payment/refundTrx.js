@@ -30,7 +30,7 @@ export async function refundTransaction(transactionId, refundAmount) {
   
   } catch (error) {
     
-    console.log(error.response.data)
+    console.log(error)
   }
 
   
