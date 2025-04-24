@@ -5,7 +5,9 @@ import { catchError } from "../../middlewares/Error/catchError.js";
 import AppError from "../../utils/appError.js";
 import { getTransactionById } from "../../utils/payment/getTrx.js";
 import { refundTransaction } from "../../utils/payment/refundTrx.js";
-// import { Order } from "../../../database/models/Order/order.model.js";
+import { User } from "../../../database/models/User/User.model.js";
+import { Order } from "../../../database/models/Order/order.model.js";
+import Payment from "../../../database/models/payment/payment.model.js";
 dotenv.config();
 
 export const createCheckOutSession = catchError(async (req, res, next) => {
@@ -36,9 +38,9 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
       const link = `https://accept.paymob.com/api/acceptance/iframes/${process.env.IFRAME_ID}?payment_token=${token}`;
     
       // respond with the payment link
-      await Cart.findByIdAndDelete(cart._id)
+      
      res.json({message:'success',Payment_Link:link});
-    if(err) return next(new AppError(err,400))
+
   })
 
 
@@ -73,46 +75,51 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
   
 
   export const webhook=catchError(async(req,res,next)=>{
-
-//     let cart= await Cart.findById(req.params.id)
-//     if(!cart) return next(new AppError("Cart Not Found",404))
-//     let totalOrderPrice=cart.totalCartPriceAfterDiscount||cart.totalCartPriceS
-// await Payment.insertOne({user:req.user._id,amount:totalOrderPrice})
-
-
-//     let order= new Order({
-//         user:req.user._id,
-//         orderItems:cart.cartItems,
-//         totalOrderPrice,
-//         shippingAddress:{
-//             city:req.body.city,
-//             street:req.body.street,
-//             phone:req.body.phone
-//         },
-//         paymentType:"visa",
-//         isPaid:true
-
-
-//     })
-//     await order.save()
-
-//     let options=cart.cartItems.map((prod)=>{
-//         return(
-//             {
-//                 updateOne:{
-//                     "filter":{_id:prod.product},
-//                     "update":{$inc:{sold:prod.quantity,stock:-prod.quantity}}
-//                 }
-//             }
-//         )
-//     })
-
-//     await Product.bulkWrite(options)
-// res.json({message:"success",order})
     const data = req.body;
-  
-    console.log("📦 Received Paymob callback:", data.obj.order);
-  
+  const email=data.obj.order.shipping_data.email
+  const user= await User.findOne({email})
+
+    let cart= await Cart.findById({user:user._id})
+    if(!cart) return next(new AppError("Cart Not Found",404))
+    // let totalOrderPrice=cart.totalCartPriceAfterDiscount||cart.totalCartPrice
+await Payment.insertOne({
+  user:req.user._id
+  ,amount:data.obj.amount_cents/100,
+Transaction_id:data.obj.id,
+currency:data.obj.order.currency
+})
+
+
+    let order= new Order({
+        user:user._id,
+        orderItems:cart.cartItems,
+        totalOrderPrice:data.obj.amount_cents/100,
+        shippingAddress:{
+            city:data.obj.order.shipping_data.city,
+            street:data.obj.order.shipping_data.street,
+            phone:data.obj.order.shipping_data.phone_number
+        },
+        paymentType:"visa",
+        isPaid:true
+
+
+    })
+    await order.save()
+
+    let options=cart.cartItems.map((prod)=>{
+        return(
+            {
+                updateOne:{
+                    "filter":{_id:prod.product},
+                    "update":{$inc:{sold:prod.quantity,stock:-prod.quantity}}
+                }
+            }
+        )
+    })
+
+    await Product.bulkWrite(options)
+    await Cart.findByIdAndDelete(cart._id)
+res.json({message:"success",order})
   //   // مثال: لو عايز تتأكد أن العملية ناجحة وتعمل update في الداتا بيز
   //   if (data.success === true && data.obj?.order?.merchant_order_id) {
   //     const merchantOrderId = data.obj.order.merchant_order_id;

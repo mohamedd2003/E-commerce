@@ -11,9 +11,6 @@ const schema = new mongoose.Schema({
         type: Number,
        
     },
-    merchant:{
-        type:Number
-    },
     created_at:{
         type:String
     },
