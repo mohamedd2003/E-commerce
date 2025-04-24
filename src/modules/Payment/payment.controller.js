@@ -58,7 +58,6 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
         transactionId,
         transaction.amount_cents
       );
-  console.log(refunded);
   
       // respond with the refunded transaction details
        res.json({message:"done"});
