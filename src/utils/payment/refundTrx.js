@@ -26,7 +26,7 @@ export async function refundTransaction(transactionId, refundAmount) {
       };
   
       const response = await axios.post(url, data, { headers });
-      console.log(response);
+      console.log(response.data);
       
       return response.data;
   

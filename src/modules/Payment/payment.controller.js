@@ -60,7 +60,7 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
       );
   
       // respond with the refunded transaction details
-       res.json({message:"done"});
+       res.json(refunded);
     } catch (error) {
   console.log(error)
 
