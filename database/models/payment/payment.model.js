@@ -10,12 +10,14 @@ const schema = new mongoose.Schema({
     order_id: {
         type: Number,
        
+    },userName:{
+        type:String
     },
     created_at:{
         type:String
     },
     
-    user: {
+    userId: {
         type:Types.ObjectId,
         ref:'User',
         required: true

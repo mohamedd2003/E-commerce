@@ -84,10 +84,12 @@ export const createCheckOutSession = catchError(async (req, res, next) => {
     if(!cart) return next(new AppError("Cart Not Found",404))
     // let totalOrderPrice=cart.totalCartPriceAfterDiscount||cart.totalCartPrice
 await Payment.insertOne({
-  user:req.user._id
-  ,amount:data.obj.amount_cents/100,
+  userId:user._id,
+userName:user.name,
+  amount:data.obj.amount_cents/100,
 Transaction_id:data.obj.id,
-currency:data.obj.order.currency
+currency:data.obj.order.currency,
+created_at:data.obj.order.created_at
 })
 
 
