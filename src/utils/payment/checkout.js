@@ -2,13 +2,14 @@
   import dotenv from "dotenv";
   import { authenticate } from "./authenticate.js";
   import Payment from "../../../database/models/payment/payment.model.js";
+import { Cart } from "../../../database/models/Cart/cart.model.js";
   dotenv.config();
 
   const PAYMOB_URL = process.env.PAYMOB_URL;
 
   // the docs for this API are here: https://docs.paymob.com/docs/accept-standard-redirect
   export async function pay(billing_data, amount_cents,userId) {
-  
+  let cart= await Cart.findOne({user:userId})
     const merchantOrderId = `${userId}-${cart._id}`;
     
     // Authentication Request -- step 1 in the docs
