@@ -8,6 +8,7 @@ import { refundTransaction } from "../../utils/payment/refundTrx.js";
 import { User } from "../../../database/models/User/User.model.js";
 import { Order } from "../../../database/models/Order/order.model.js";
 import Payment from "../../../database/models/payment/payment.model.js";
+import { Product } from "../../../database/models/Product/Product.model.js";
 dotenv.config();
 
 export const createCheckOutSession = catchError(async (req, res, next) => {
