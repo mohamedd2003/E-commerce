@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { createCheckOutSession, refund, webhook } from "./payment.controller.js";
 import { auth } from "../../middlewares/Auth/auth.js";
-import { allowedTo } from "../../middlewares/Auth/allowedTo.js";
 
 const paymentRouter=Router()
 
