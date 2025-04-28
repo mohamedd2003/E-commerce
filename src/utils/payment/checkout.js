@@ -47,7 +47,7 @@
     const paymentKeyData = {
       auth_token: accessToken,
       amount_cents,
-      expiration: 3600,
+      expiration: 600,
       order_id: orderId,
       billing_data,
       currency: "EGP",
