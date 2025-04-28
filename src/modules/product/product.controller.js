@@ -69,8 +69,8 @@ export const addProductsFromExcel = catchError(async (req, res, next) => {
     const worksheet = workbook.Sheets[sheetName];
     
     // حوّل البيانات من الشيت ل JSON
-    const productsData = xlsx.utils.sheet_to_json(worksheet);
-    console.log(productsData);
+    const productsData = xlsx.utils.sheet_to_json(worksheet);//Retuen Arr Of Objects
+
   
     if (!productsData.length) {
       return next(new AppError("No products found in the Excel file", 400));
