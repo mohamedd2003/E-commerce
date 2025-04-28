@@ -1,12 +1,13 @@
 import multer from "multer";
 import AppError from "../utils/appError.js";
 import cloudinary from "cloudinary";
-
+import dotenv from "dotenv"
+dotenv.config()
 // Configure Cloudinary
 cloudinary.config({ 
-    cloud_name: 'dnmwmrxmr', 
-    api_key: '586539159664933', 
-    api_secret: 'NvfUL5qc6pWKBmar4PPc8uMPfes' 
+    cloud_name:process.env.CLOUDINARY_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET 
 });
 
 // Multer configuration
@@ -15,9 +16,9 @@ export const fileUpload = () => {
 
     function fileFilter(req, file, cb) {
         // Check if the file is an image
-        if (!file.mimetype.startsWith('image')) {
-            return cb(new AppError('Only images are allowed', 401), false);
-        }
+        // if (!file.mimetype.startsWith('image')) {
+        //     return cb(new AppError('Only images are allowed', 401), false);
+        // }
         // Accept the file
         cb(null, true);
     }
