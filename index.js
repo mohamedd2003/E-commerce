@@ -4,6 +4,7 @@ import { globalError } from './src/middlewares/Error/globalError.js'
 import AppError from './src/utils/appError.js'
 import { bootstrap } from './src/modules/bootstrap.js'
 import cors from "cors"
+import compression from "compression"
 import dotenv from "dotenv"
 dotenv.config()
 const app = express()
@@ -14,6 +15,7 @@ app.use(express.json())
 bootstrap(app)
 
 app.use(globalError)
+app.use(compression())
 app.get("/", (req, res) => {
     res.status(200).json({ message: "Welcome to the API!" });
   });
